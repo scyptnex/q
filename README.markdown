@@ -1,4 +1,7 @@
 # q - Text as Data
+
+[![Build Status](https://travis-ci.org/scyptnex/q.svg?branch=master)](https://travis-ci.org/scyptnex/q)
+
 q is a command line tool that allows direct execution of SQL-like queries on CSVs/TSVs (and any other tabular text files).
 
 q treats ordinary files as database tables, and supports all SQL constructs, such as WHERE, GROUP BY, JOINs etc. It supports automatic column name and column type detection, and provides full support for multiple encodings.

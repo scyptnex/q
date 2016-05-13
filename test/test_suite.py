@@ -1594,10 +1594,9 @@ class FormattingTests(AbstractQTestCase):
         self.assertEquals(o[0], '55.000 5.500')
 
     def test_column_formatting_with_output_header(self):
-        # Required in order to maintain compatibility between GNU and POSIX sed
-        # (simplistic 1i column_name sed command did not run properly on mac machines)
-        sed_cmd = "'1i\\'$'\\n''column_name'$'\\n'"
-        cmd = 'seq 1 10 | sed ' + sed_cmd + ' | ../bin/q -f 1=%4.3f,2=%4.3f "select sum(column_name) mysum,avg(column_name) myavg from -" -c 1 -H -O'
+        cmd = 'seq 1 10 | ../bin/q -f 1=%4.3f,2=%4.3f "select sum(c1) mysum,avg(c1) myavg from -" -c 1 -O'
+        # Preserves the functionality of the old test, but to me it looks ugly
+        #cmd = 'echo "column_name\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" | ../bin/q -f 1=%4.3f,2=%4.3f "select sum(column_name) mysum,avg(column_name) myavg from -" -c 1 -H -O'
 
         retcode, o, e = run_command(cmd)
 
@@ -1719,7 +1718,7 @@ class SqlTests(AbstractQTestCase):
         self.assertEquals(o[4],'  `float_number` - float')
 
         # Check column types detected when actual detection is disabled
-        cmd = '../bin/q -A -d , -H --disable-column-type-detection "select * from %s"' % (tmpfile.name)
+        cmd = '../bin/q -A -d , -H --as-text "select * from %s"' % (tmpfile.name)
 
         retcode, o, e = run_command(cmd)
 
@@ -1748,7 +1747,7 @@ class SqlTests(AbstractQTestCase):
         self.assertEquals(o[3],"regular text 4,-123,-123,122.2");
 
         # Get actual data without detection
-        cmd = '../bin/q -d , -H --disable-column-type-detection "select * from %s"' % (tmpfile.name)
+        cmd = '../bin/q -d , -H --as-text "select * from %s"' % (tmpfile.name)
 
         retcode, o, e = run_command(cmd)
 
